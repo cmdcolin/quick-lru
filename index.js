@@ -202,6 +202,24 @@ export default class QuickLRU extends Map {
 		this.#maxSize = newSize;
 	}
 
+	evict(count = 1) {
+		const requested = Number(count);
+		if (!requested || requested <= 0) {
+			return;
+		}
+
+		const items = [...this.#entriesAscending()];
+		const evictCount = Math.trunc(Math.min(requested, Math.max(items.length - 1, 0)));
+		if (evictCount <= 0) {
+			return;
+		}
+
+		this.#emitEvictions(items.slice(0, evictCount));
+		this.#oldCache = new Map(items.slice(evictCount));
+		this.#cache = new Map();
+		this.#size = 0;
+	}
+
 	* keys() {
 		for (const [key] of this) {
 			yield key;

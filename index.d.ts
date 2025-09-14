@@ -17,11 +17,11 @@ export type Options<KeyType, ValueType> = {
 	readonly maxSize: number;
 
 	/**
-	Called right before an item is evicted from the cache due to LRU pressure or TTL expiration.
+	Called right before an item is evicted from the cache due to LRU pressure, TTL expiration, or manual eviction via `evict()`.
 
 	Useful for side effects or for items like object URLs that need explicit cleanup (`revokeObjectURL`).
 
-	__Note:__ This callback is not called for manual removals via `delete()` or `clear()`. It only fires for automatic evictions.
+	__Note:__ This callback is not called for manual removals via `delete()` or `clear()`. It fires for automatic evictions and manual evictions via `evict()`.
 	*/
 	onEviction?: (key: KeyType, value: ValueType) => void;
 };
@@ -140,4 +140,32 @@ export default class QuickLRU<KeyType, ValueType> extends Map<KeyType, ValueType
 	Iterable for all entries, starting with the newest (descending in recency).
 	*/
 	entriesDescending(): IterableIterator<[KeyType, ValueType]>;
+
+	/**
+	Evict the least recently used items from the cache.
+
+	@param count - The number of items to evict. Defaults to 1.
+
+	It will always keep at least one item in the cache.
+
+	@example
+	```
+	import QuickLRU from 'quick-lru';
+
+	const lru = new QuickLRU({maxSize: 10});
+
+	lru.set('a', 1);
+	lru.set('b', 2);
+	lru.set('c', 3);
+
+	lru.evict(2); // Evicts 'a' and 'b'
+
+	console.log(lru.has('a'));
+	//=> false
+
+	console.log(lru.has('c'));
+	//=> true
+	```
+	*/
+	evict(count?: number): void;
 }
