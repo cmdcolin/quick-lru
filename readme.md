@@ -64,9 +64,12 @@ Individual expiration of an item can be specified by the `set(key, value, option
 *Optional*\
 Type: `(key, value) => void`
 
-Called right before an item is evicted from the cache.
+Called right before an item is evicted from the cache due to LRU pressure or TTL expiration.
 
 Useful for side effects or for items like object URLs that need explicit cleanup (`revokeObjectURL`).
+
+> [!NOTE]
+> This callback is **not** called for manual removals via `delete()` or `clear()`. It only fires for automatic evictions.
 
 ### Instance
 

@@ -17,9 +17,11 @@ export type Options<KeyType, ValueType> = {
 	readonly maxSize: number;
 
 	/**
-	Called right before an item is evicted from the cache.
+	Called right before an item is evicted from the cache due to LRU pressure or TTL expiration.
 
 	Useful for side effects or for items like object URLs that need explicit cleanup (`revokeObjectURL`).
+
+	__Note:__ This callback is not called for manual removals via `delete()` or `clear()`. It only fires for automatic evictions.
 	*/
 	onEviction?: (key: KeyType, value: ValueType) => void;
 };
