@@ -4,7 +4,7 @@
 
 Useful when you need to cache something and limit memory usage.
 
-Inspired by the [`hashlru` algorithm](https://github.com/dominictarr/hashlru#algorithm), but instead uses [`Map`](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/Map) to support keys of any type, not just strings, and values can be `undefined`.
+See the [algorithm section](#algorithm) for implementation details.
 
 ## Install
 
@@ -45,7 +45,10 @@ Type: `object`
 *Required*\
 Type: `number`
 
-The maximum number of items before evicting the least recently used items.
+The target maximum number of items before evicting the least recently used items.
+
+> [!NOTE]
+> This package uses an [algorithm](#algorithm) which maintains between `maxSize` and `2 × maxSize` items for performance reasons. The cache may temporarily contain up to twice the specified size due to the dual-cache design that avoids expensive delete operations.
 
 #### maxAge
 
@@ -181,6 +184,48 @@ The stored item count.
 #### .maxSize *(getter)*
 
 The set max size.
+
+## Algorithm
+
+This library implements a variant of the [hashlru algorithm](https://github.com/dominictarr/hashlru#algorithm) using JavaScript's `Map` for broader key type support.
+
+### How it works
+
+The algorithm uses a dual-cache approach with two `Map` objects:
+
+1. New cache - Stores recently accessed items
+2. Old cache - Stores less recently accessed items
+
+On `set()` operations:
+- If the key exists in the new cache, update it
+- Otherwise, add the key-value pair to the new cache
+- When the new cache reaches `maxSize`, promote it to become the old cache and create a fresh new cache
+
+On `get()` operations:
+- If the key is in the new cache, return it directly
+- If the key is in the old cache, move it to the new cache (promoting its recency)
+
+### Benefits
+
+- Performance: Avoids expensive `delete` operations that can cause performance issues in JavaScript engines
+- Simplicity: No complex linked list management required
+- Cache efficiency: Maintains LRU semantics while being much faster than traditional implementations
+
+### Trade-offs
+
+- Size variance: The cache can contain between `maxSize` and `2 × maxSize` items temporarily
+- Memory overhead: Uses up to twice the target memory compared to strict LRU implementations
+
+### When to use
+
+Choose this implementation when:
+- You need high-performance caching with many operations
+- You can tolerate temporary size variance for better performance
+- You want simple, reliable caching without complex data structures
+
+Consider alternatives when:
+- You need strict memory limits (exactly `maxSize` items)
+- Memory usage is more critical than performance
 
 ## Related
 

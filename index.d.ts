@@ -12,7 +12,9 @@ export type Options<KeyType, ValueType> = {
 	readonly maxAge?: number;
 
 	/**
-	The maximum number of items before evicting the least recently used items.
+	The target maximum number of items before evicting the least recently used items.
+
+	__Note:__ This package uses an [algorithm](https://github.com/sindresorhus/quick-lru#algorithm) which maintains between `maxSize` and `2 × maxSize` items for performance reasons. The cache may temporarily contain up to twice the specified size due to the dual-cache design that avoids expensive delete operations.
 	*/
 	readonly maxSize: number;
 
