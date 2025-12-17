@@ -29,7 +29,6 @@ export interface Options<KeyType, ValueType> {
 }
 
 export default class QuickLRU<KeyType, ValueType>
-	extends Map<KeyType, ValueType>
 	implements Iterable<[KeyType, ValueType]>
 {
 	/**
@@ -149,6 +148,20 @@ export default class QuickLRU<KeyType, ValueType>
 	Iterable for all entries, starting with the newest (descending in recency).
 	*/
 	entriesDescending(): IterableIterator<[KeyType, ValueType]>
+
+	/**
+	Iterable for all entries, starting with the oldest (ascending in recency).
+	Alias for `entriesAscending()`.
+	*/
+	entries(): IterableIterator<[KeyType, ValueType]>
+
+	/**
+	Executes a provided function once for each key-value pair.
+	*/
+	forEach(
+		callbackFunction: (value: ValueType, key: KeyType, map: QuickLRU<KeyType, ValueType>) => void,
+		thisArgument?: unknown
+	): void
 
 	/**
 	Evict the least recently used items from the cache.
