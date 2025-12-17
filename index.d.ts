@@ -9,14 +9,14 @@ export type Options<KeyType, ValueType> = {
 
 	Individual expiration of an item can be specified with the `set(key, value, {maxAge})` method.
 	*/
-	readonly maxAge?: number;
+	readonly maxAge?: number
 
 	/**
 	The target maximum number of items before evicting the least recently used items.
 
 	__Note:__ This package uses an [algorithm](https://github.com/sindresorhus/quick-lru#algorithm) which maintains between `maxSize` and `2 × maxSize` items for performance reasons. The cache may temporarily contain up to twice the specified size due to the dual-cache design that avoids expensive delete operations.
 	*/
-	readonly maxSize: number;
+	readonly maxSize: number
 
 	/**
 	Called right before an item is evicted from the cache due to LRU pressure, TTL expiration, or manual eviction via `evict()`.
@@ -25,11 +25,14 @@ export type Options<KeyType, ValueType> = {
 
 	__Note:__ This callback is not called for manual removals via `delete()` or `clear()`. It fires for automatic evictions and manual evictions via `evict()`.
 	*/
-	onEviction?: (key: KeyType, value: ValueType) => void;
-};
+	onEviction?: (key: KeyType, value: ValueType) => void
+}
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
-export default class QuickLRU<KeyType, ValueType> extends Map<KeyType, ValueType> implements Iterable<[KeyType, ValueType]> {
+export default class QuickLRU<KeyType, ValueType>
+	extends Map<KeyType, ValueType>
+	implements Iterable<[KeyType, ValueType]>
+{
 	/**
 	Simple ["Least Recently Used" (LRU) cache](https://en.m.wikipedia.org/wiki/Cache_replacement_policies#Least_Recently_Used_.28LRU.29).
 
@@ -50,9 +53,9 @@ export default class QuickLRU<KeyType, ValueType> extends Map<KeyType, ValueType
 	//=> '🌈'
 	```
 	*/
-	constructor(options: Options<KeyType, ValueType>);
+	constructor(options: Options<KeyType, ValueType>)
 
-	[Symbol.iterator](): IterableIterator<[KeyType, ValueType]>;
+	[Symbol.iterator](): IterableIterator<[KeyType, ValueType]>
 
 	/**
 	Set an item. Returns the instance.
@@ -61,38 +64,38 @@ export default class QuickLRU<KeyType, ValueType> extends Map<KeyType, ValueType
 
 	@returns The cache instance.
 	*/
-	set(key: KeyType, value: ValueType, options?: {maxAge?: number}): this;
+	set(key: KeyType, value: ValueType, options?: { maxAge?: number }): this
 
 	/**
 	Get an item.
 
 	@returns The stored item or `undefined`.
 	*/
-	get(key: KeyType): ValueType | undefined;
+	get(key: KeyType): ValueType | undefined
 
 	/**
 	Check if an item exists.
 	*/
-	has(key: KeyType): boolean;
+	has(key: KeyType): boolean
 
 	/**
 	Get an item without marking it as recently used.
 
 	@returns The stored item or `undefined`.
 	*/
-	peek(key: KeyType): ValueType | undefined;
+	peek(key: KeyType): ValueType | undefined
 
 	/**
 	Delete an item.
 
 	@returns `true` if the item is removed or `false` if the item doesn't exist.
 	*/
-	delete(key: KeyType): boolean;
+	delete(key: KeyType): boolean
 
 	/**
 	Delete all items.
 	*/
-	clear(): void;
+	clear(): void
 
 	/**
 	Get the remaining time to live (in milliseconds) for the given item, or `undefined` when the item is not in the cache.
@@ -104,49 +107,49 @@ export default class QuickLRU<KeyType, ValueType> extends Map<KeyType, ValueType
 
 	@returns Remaining time to live in milliseconds when set, `Infinity` when there is no expiration, or `undefined` when the item does not exist.
 	*/
-	expiresIn(key: KeyType): number | undefined;
+	expiresIn(key: KeyType): number | undefined
 
 	/**
 	Update the `maxSize` in-place, discarding items as necessary. Insertion order is mostly preserved, though this is not a strong guarantee.
 
 	Useful for on-the-fly tuning of cache sizes in live systems.
 	*/
-	resize(maxSize: number): void;
+	resize(maxSize: number): void
 
 	/**
 	The stored item count.
 	*/
-	get size(): number;
+	get size(): number
 
 	/**
 	The set max size.
 	*/
-	get maxSize(): number;
+	get maxSize(): number
 
 	/**
 	The set max age.
 	*/
-	get maxAge(): number;
+	get maxAge(): number
 
 	/**
 	Iterable for all the keys.
 	*/
-	keys(): IterableIterator<KeyType>;
+	keys(): IterableIterator<KeyType>
 
 	/**
 	Iterable for all the values.
 	*/
-	values(): IterableIterator<ValueType>;
+	values(): IterableIterator<ValueType>
 
 	/**
 	Iterable for all entries, starting with the oldest (ascending in recency).
 	*/
-	entriesAscending(): IterableIterator<[KeyType, ValueType]>;
+	entriesAscending(): IterableIterator<[KeyType, ValueType]>
 
 	/**
 	Iterable for all entries, starting with the newest (descending in recency).
 	*/
-	entriesDescending(): IterableIterator<[KeyType, ValueType]>;
+	entriesDescending(): IterableIterator<[KeyType, ValueType]>
 
 	/**
 	Evict the least recently used items from the cache.
@@ -174,5 +177,5 @@ export default class QuickLRU<KeyType, ValueType> extends Map<KeyType, ValueType
 	//=> true
 	```
 	*/
-	evict(count?: number): void;
+	evict(count?: number): void
 }
