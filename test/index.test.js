@@ -849,6 +849,7 @@ test('function value', () => {
 test('[Symbol.toStringTag] output', () => {
 	const lru = new QuickLRU({ maxSize: 2 })
 	lru.set('1', 1)
+
 	expect(lru[Symbol.toStringTag]).toBe('QuickLRU')
 })
 
@@ -857,6 +858,7 @@ test('toString() works as expected', () => {
 	lru.set('1', 1)
 	lru.set('2', 2)
 
+	// eslint-disable-next-line @typescript-eslint/no-base-to-string
 	expect(lru.toString()).toBe('QuickLRU(2/2)')
 })
 
@@ -881,9 +883,11 @@ test('handles circular references gracefully', () => {
 	lru.set('key2', object2)
 
 	expect(() => {
+		// eslint-disable-next-line @typescript-eslint/no-base-to-string
 		String(lru)
 	}).not.toThrow()
 
+	// eslint-disable-next-line @typescript-eslint/no-base-to-string
 	expect(lru.toString()).toBe('QuickLRU(2/2)')
 
 	expect(Object.prototype.toString.call(lru)).toBe('[object QuickLRU]')
