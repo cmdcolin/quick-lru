@@ -51,7 +51,7 @@ export default class QuickLRU extends Map {
 
 	#getOrDeleteIfExpired(key, item) {
 		const deleted = this.#deleteIfExpired(key, item)
-		if (deleted === false) {
+		if (!deleted) {
 			return item.value
 		}
 	}
@@ -87,7 +87,7 @@ export default class QuickLRU extends Map {
 			const [key, value] = item
 			if (!this.#cache.has(key)) {
 				const deleted = this.#deleteIfExpired(key, value)
-				if (deleted === false) {
+				if (!deleted) {
 					yield item
 				}
 			}
@@ -96,7 +96,7 @@ export default class QuickLRU extends Map {
 		for (const item of this.#cache) {
 			const [key, value] = item
 			const deleted = this.#deleteIfExpired(key, value)
-			if (deleted === false) {
+			if (!deleted) {
 				yield item
 			}
 		}
@@ -110,7 +110,7 @@ export default class QuickLRU extends Map {
 
 		if (this.#oldCache.has(key)) {
 			const item = this.#oldCache.get(key)
-			if (this.#deleteIfExpired(key, item) === false) {
+			if (!this.#deleteIfExpired(key, item)) {
 				this.#moveToRecent(key, item)
 				return item.value
 			}
@@ -204,7 +204,7 @@ export default class QuickLRU extends Map {
 	}
 
 	evict(count = 1) {
-		const requested = Number(count)
+		const requested = count
 		if (!requested || requested <= 0) {
 			return
 		}
@@ -239,7 +239,7 @@ export default class QuickLRU extends Map {
 		for (const item of this.#cache) {
 			const [key, value] = item
 			const deleted = this.#deleteIfExpired(key, value)
-			if (deleted === false) {
+			if (!deleted) {
 				yield [key, value.value]
 			}
 		}
@@ -248,7 +248,7 @@ export default class QuickLRU extends Map {
 			const [key, value] = item
 			if (!this.#cache.has(key)) {
 				const deleted = this.#deleteIfExpired(key, value)
-				if (deleted === false) {
+				if (!deleted) {
 					yield [key, value.value]
 				}
 			}
@@ -261,7 +261,7 @@ export default class QuickLRU extends Map {
 			const item = items[i]
 			const [key, value] = item
 			const deleted = this.#deleteIfExpired(key, value)
-			if (deleted === false) {
+			if (!deleted) {
 				yield [key, value.value]
 			}
 		}
@@ -272,7 +272,7 @@ export default class QuickLRU extends Map {
 			const [key, value] = item
 			if (!this.#cache.has(key)) {
 				const deleted = this.#deleteIfExpired(key, value)
-				if (deleted === false) {
+				if (!deleted) {
 					yield [key, value.value]
 				}
 			}
@@ -318,6 +318,7 @@ export default class QuickLRU extends Map {
 		}
 	}
 
+	// eslint-disable-next-line @typescript-eslint/class-literal-property-style
 	get [Symbol.toStringTag]() {
 		return 'QuickLRU'
 	}

@@ -1,5 +1,7 @@
 import { setTimeout as delay } from 'node:timers/promises'
-import { test, expect } from 'vitest'
+
+import { expect, test } from 'vitest'
+
 import QuickLRU from '../src/index.js'
 
 const lruWithDuplicates = () => {
@@ -12,13 +14,13 @@ const lruWithDuplicates = () => {
 
 test('main', () => {
 	expect(() => {
-		new QuickLRU() // eslint-disable-line no-new
+		new QuickLRU()
 	}).toThrow(/maxSize/)
 })
 
 test('maxAge: throws on invalid value', () => {
 	expect(() => {
-		new QuickLRU({ maxSize: 10, maxAge: 0 }) // eslint-disable-line no-new
+		new QuickLRU({ maxSize: 10, maxAge: 0 })
 	}).toThrow(/maxAge/)
 })
 
@@ -854,6 +856,8 @@ test('toString() works as expected', () => {
 	const lru = new QuickLRU({ maxSize: 2 })
 	lru.set('1', 1)
 	lru.set('2', 2)
+
+	// eslint-disable-next-line @typescript-eslint/no-base-to-string
 	expect(lru.toString()).toBe('QuickLRU(2/2)')
 })
 
@@ -878,10 +882,13 @@ test('handles circular references gracefully', () => {
 	lru.set('key2', object2)
 
 	expect(() => {
+		// eslint-disable-next-line @typescript-eslint/no-base-to-string
 		String(lru)
 	}).not.toThrow()
 
+	// eslint-disable-next-line @typescript-eslint/no-base-to-string
 	expect(lru.toString()).toBe('QuickLRU(2/2)')
+
 	expect(Object.prototype.toString.call(lru)).toBe('[object QuickLRU]')
 })
 
@@ -1316,8 +1323,7 @@ test('.evict() with circular references', () => {
 	const circular1 = { name: 'obj1' }
 	circular1.self = circular1
 
-	const circular2 = { name: 'obj2' }
-	circular2.ref = circular1
+	const circular2 = { name: 'obj2', ref: circular1 }
 	circular1.ref = circular2
 
 	lru.set('circular1', circular1)

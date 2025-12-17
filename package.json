@@ -1,6 +1,6 @@
 {
 	"name": "@jbrowse/quick-lru",
-	"version": "7.3.0",
+	"version": "7.3.1",
 	"description": "Simple “Least Recently Used” (LRU) cache, forked from sindresorhus/quick-lru for CJS",
 	"license": "MIT",
 	"repository": "cmdcolin/quick-lru",
@@ -55,9 +55,16 @@
 		"buffer"
 	],
 	"devDependencies": {
+		"eslint": "^9.39.2",
+		"eslint-plugin-import": "^2.32.0",
+		"eslint-plugin-unicorn": "^62.0.0",
 		"prettier": "^3.7.4",
 		"rimraf": "^6.1.2",
 		"typescript": "^5.9.3",
+		"typescript-eslint": "^8.50.0",
 		"vitest": "^4.0.16"
+	},
+	"publishConfig": {
+		"access": "public"
 	}
 }

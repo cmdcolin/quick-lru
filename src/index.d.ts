@@ -1,4 +1,4 @@
-export type Options<KeyType, ValueType> = {
+export interface Options<KeyType, ValueType> {
 	/**
 	The maximum number of milliseconds an item should remain in the cache.
 
@@ -28,7 +28,6 @@ export type Options<KeyType, ValueType> = {
 	onEviction?: (key: KeyType, value: ValueType) => void
 }
 
-// eslint-disable-next-line @typescript-eslint/naming-convention
 export default class QuickLRU<KeyType, ValueType>
 	extends Map<KeyType, ValueType>
 	implements Iterable<[KeyType, ValueType]>
