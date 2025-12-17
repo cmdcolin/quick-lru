@@ -37,8 +37,9 @@
 		"postversion": "git push --follow-tags"
 	},
 	"files": [
-		"index.js",
-		"index.d.ts"
+		"dist",
+		"esm",
+		"src"
 	],
 	"keywords": [
 		"lru",
@@ -55,6 +56,7 @@
 	],
 	"devDependencies": {
 		"prettier": "^3.7.4",
+		"rimraf": "^6.1.2",
 		"typescript": "^5.9.3",
 		"vitest": "^4.0.16"
 	}

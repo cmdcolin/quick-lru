@@ -1,6 +1,6 @@
 import { setTimeout as delay } from 'node:timers/promises'
 import { test, expect } from 'vitest'
-import QuickLRU from './index.js'
+import QuickLRU from '../src/index.js'
 
 const lruWithDuplicates = () => {
 	const lru = new QuickLRU({ maxSize: 2 })
