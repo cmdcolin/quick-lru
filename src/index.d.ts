@@ -28,9 +28,9 @@ export interface Options<KeyType, ValueType> {
 	onEviction?: (key: KeyType, value: ValueType) => void
 }
 
-export default class QuickLRU<KeyType, ValueType>
-	implements Iterable<[KeyType, ValueType]>
-{
+export default class QuickLRU<KeyType, ValueType> implements Iterable<
+	[KeyType, ValueType]
+> {
 	/**
 	Simple ["Least Recently Used" (LRU) cache](https://en.m.wikipedia.org/wiki/Cache_replacement_policies#Least_Recently_Used_.28LRU.29).
 
@@ -159,8 +159,12 @@ export default class QuickLRU<KeyType, ValueType>
 	Executes a provided function once for each key-value pair.
 	*/
 	forEach(
-		callbackFunction: (value: ValueType, key: KeyType, map: QuickLRU<KeyType, ValueType>) => void,
-		thisArgument?: unknown
+		callbackFunction: (
+			value: ValueType,
+			key: KeyType,
+			map: QuickLRU<KeyType, ValueType>,
+		) => void,
+		thisArgument?: unknown,
 	): void
 
 	/**
