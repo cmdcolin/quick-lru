@@ -1,6 +1,6 @@
 {
   "name": "@jbrowse/quick-lru",
-  "version": "7.3.5",
+  "version": "8.0.0",
   "packageManager": "pnpm@11.20.0",
   "description": "Simple “Least Recently Used” (LRU) cache, forked from sindresorhus/quick-lru for CJS",
   "license": "MIT",
