@@ -1,7 +1,7 @@
 node_modules
-yarn.lock
-.nyc_output
 coverage
 dist
 esm
 .eslintcache
+.claude/settings.local.json
+.claude/worktrees/
