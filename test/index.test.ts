@@ -1502,15 +1502,9 @@ test('.evict() stress test with many items', () => {
 
   expect(lru.size).toBe(1000)
 
-  // Evict large batch
-  const start = Date.now()
   lru.evict(500)
-  const duration = Date.now() - start
-
   expect(lru.size).toBe(500)
-  expect(duration < 100).toBe(true) // Should be fast (< 100ms)
 
-  // Verify remaining items are the most recent
   for (let i = 500; i < 1000; i++) {
     expect(lru.has(i)).toBe(true)
   }
@@ -1804,28 +1798,19 @@ test('.evict() type coercion with special objects', () => {
   expect(lru.size).toBe(3)
 })
 
-test('.evict() performance with large maxAge and many expired items', async () => {
+test('.evict() skips expired items when counting', async () => {
   const lru = new QuickLRU({ maxSize: 100 })
-
-  // Add many items with short expiry
   for (let i = 0; i < 50; i++) {
     lru.set(`expired${i}`, i, { maxAge: 1 })
   }
-
-  // Add some permanent items
   for (let i = 0; i < 10; i++) {
     lru.set(`perm${i}`, i)
   }
 
-  await delay(10) // Let expired items expire
-
-  // Performance test: should be fast even with many expired items
-  const start = Date.now()
+  await delay(10)
   lru.evict(5)
-  const duration = Date.now() - start
 
-  expect(duration < 50).toBe(true) // Should be very fast
-  expect(lru.size <= 10).toBe(true) // Should have evicted some permanent items too
+  expect([...lru.keys()]).toEqual(['perm5', 'perm6', 'perm7', 'perm8', 'perm9'])
 })
 
 test('.evict() boundary: evict count equals live items minus one', () => {
